@@ -174,7 +174,7 @@
                  :use-modeline-p use-modeline-p))
 
 (defun clear-screens-of-window-list ()
-  (dolist (window (window-list))
+  (dolist (window (all-window-list))
     (screen-clear (window-screen window))))
 
 (defgeneric %delete-window (window))
@@ -352,7 +352,7 @@
     (setf (frame-window-tree frame) window)))
 
 (defun teardown-windows (frame)
-  (mapc #'%free-window (window-list frame)))
+  (mapc #'%free-window (all-window-list frame)))
 
 (defun window-recenter (window)
   (line-start
