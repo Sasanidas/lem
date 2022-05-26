@@ -74,7 +74,10 @@ redraw-displayを呼び出したとき、画面の最小限の更新だけでは
     :accessor frame-floating-prompt-window)
    (message-window
     :initform nil
-    :accessor frame-message-window)))
+    :accessor frame-message-window)
+   (sidebar-window
+    :initform nil
+    :accessor frame-sidebar-window)))
 
 (defmethod notify-floating-window-modified ((frame frame))
   (set-frame-modified-floating-windows t frame))
@@ -137,7 +140,8 @@ redraw-displayを呼び出したとき、画面の最小限の更新だけでは
 (defun window-in-frame-p (window frame)
   (when (or (find window (window-list frame))
             (find window (frame-floating-windows frame))
-            (find window (frame-header-windows frame)))
+            (find window (frame-header-windows frame))
+            (eq window (frame-sidebar-window frame)))
     t))
 
 (defun get-frame-of-window (window)
@@ -159,8 +163,9 @@ redraw-displayを呼び出したとき、画面の最小限の更新だけでは
   (length (frame-header-windows frame)))
 
 (defun topleft-window-x (frame)
-  (declare (ignore frame))
-  0)
+  (if (null (frame-sidebar-window frame))
+      0
+      (window-width (frame-sidebar-window frame))))
 
 (defun max-window-width (frame)
   (- (display-width) (topleft-window-x frame)))

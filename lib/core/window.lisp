@@ -316,8 +316,13 @@
                (window-tree-parent (window-node-cdr tree) node))))))
 
 (defun window-list (&optional (frame (current-frame)))
-  (window-tree-flatten
-   (frame-window-tree frame)))
+  (window-tree-flatten (frame-window-tree frame)))
+
+(defun all-window-list (&optional (frame (current-frame)))
+  (append (window-tree-flatten (frame-window-tree frame))
+          (frame-header-windows frame)
+          (frame-floating-windows frame)
+          (uiop:ensure-list (frame-sidebar-window frame))))
 
 (defun one-window-p ()
   (window-tree-leaf-p (window-tree)))
