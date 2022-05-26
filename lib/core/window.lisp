@@ -1049,7 +1049,10 @@ window width is changed, we must recalc the window view point."
                                        (include-floating-windows nil))
   (loop :for window :in (append (window-list frame)
                                 (when include-floating-windows
-                                  (frame-floating-windows frame)))
+                                  (frame-floating-windows frame))
+                                (when include-floating-windows
+                                  ;; REVIEW: floating-window?
+                                  (uiop:ensure-list (frame-sidebar-window frame))))
         :when (eq buffer (window-buffer window))
         :collect window))
 
