@@ -42,17 +42,17 @@
   (loop :with output
         :for (start1 end1 value1) :in elements
         :do (cond
-	      ((<= start start1 end1 end)
-	       nil)
-	      ((<= start start1 end end1)
-	       (push (list end end1 value1) output))
-	      ((<= start1 start end1 end)
-	       (push (list start1 start value1) output))
-	      ((<= start1 start end end1)
-	       (push (list start1 start value1) output)
-	       (push (list end end1 value1) output))
-	      (t
-	       (push (list start1 end1 value1)  output)))
+              ((<= start start1 end1 end)
+               nil)
+              ((<= start start1 end end1)
+               (push (list end end1 value1) output))
+              ((<= start1 start end1 end)
+               (push (list start1 start value1) output))
+              ((<= start1 start end end1)
+               (push (list start1 start value1) output)
+               (push (list end end1 value1) output))
+              (t
+               (push (list start1 end1 value1)  output)))
         :finally (return output)))
 
 (defun normalization-elements (elements)
@@ -90,7 +90,7 @@
 
 (defun offset-elements (elements n)
   (loop :for (start1 end1 value1) :in elements
-	:collect (list (+ n start1) (+ n end1) value1)))
+        :collect (list (+ n start1) (+ n end1) value1)))
 
 (defun put-elements (elements start end value &optional contp)
   (normalization-elements
