@@ -53,7 +53,7 @@
                (push (list end end1 value1) output))
               (t
                (push (list start1 end1 value1)  output)))
-        :finally (return output)))
+        :finally (return (nreverse output))))
 
 (defun normalization-elements (elements)
   (flet ((start (elt) (first elt))
@@ -77,16 +77,19 @@
                         (setf elements (cdr elements))))))))
 
 (defun subseq-elements (elements start end)
-  (iter:iter (iter:for (start1 end1 value1) iter:in elements)
-    (cond
-      ((<= start start1 end1 end)
-       (iter:collect (list (- start1 start) (- end1 start) value1)))
-      ((<= start start1 end end1)
-       (iter:collect (list (- start1 start) (- end start) value1)))
-      ((<= start1 start end1 end)
-       (iter:collect (list (- start start) (- end1 start) value1)))
-      ((<= start1 start end end1)
-       (iter:collect (list (- start start) (- end start) value1))))))
+  (loop :with output
+        :for (start1 end1 value1) :in elements
+        :do
+           (cond
+             ((<= start start1 end1 end)
+              (push (list (- start1 start) (- end1 start) value1) output))
+             ((<= start start1 end end1)
+              (push (list (- start1 start) (- end start) value1) output))
+             ((<= start1 start end1 end)
+              (push (list (- start start) (- end1 start) value1) output))
+             ((<= start1 start end end1)
+              (push (list (- start start) (- end start) value1) output)))
+        :finally (return (nreverse output))))
 
 (defun offset-elements (elements n)
   (loop :for (start1 end1 value1) :in elements
